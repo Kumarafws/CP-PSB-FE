@@ -21,6 +21,9 @@ import AdminRegistrations from './pages/admin/registrations';
 import AdminDocuments from './pages/admin/documents';
 import AdminStudents from './pages/admin/students';
 import AdminReports from './pages/admin/reports';
+import AdminPeriod from './pages/admin/period';
+import AdminQuota from './pages/admin/quota';
+import ParentAccounts from './pages/admin/parent-accounts';
 
 // Headmaster Pages
 import HeadmasterDashboard from './pages/headmaster/dashboard';
@@ -74,6 +77,9 @@ function App() {
           <Route path="/admin/documents" element={<AdminDocuments />} />
           <Route path="/admin/students" element={<AdminStudents />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+          <Route path="/admin/period" element={<AdminPeriod />} />
+          <Route path="/admin/quota" element={<AdminQuota />} />
+          <Route path="/admin/parent-accounts" element={<ParentAccounts />} />
 
           {/* Headmaster Routes */}
           <Route

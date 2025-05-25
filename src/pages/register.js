@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -10,6 +10,8 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [currentPeriod, setCurrentPeriod] = useState(null);
   const [uploadedFiles, setUploadedFiles] = useState({
     akte: null,
     kk: null,
@@ -17,6 +19,32 @@ export default function RegisterPage() {
   });
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Simulasi pengecekan periode pendaftaran
+    const checkRegistrationPeriod = async () => {
+      try {
+        // Ganti dengan API call sebenarnya
+        const response = {
+          isOpen: true,
+          period: {
+            name: "Pendaftaran Tahun Ajaran 2024/2025",
+            startDate: "2024-01-01",
+            endDate: "2024-03-31",
+            academicYear: "2024/2025"
+          }
+        };
+
+        setIsRegistrationOpen(response.isOpen);
+        setCurrentPeriod(response.period);
+      } catch (error) {
+        console.error("Error checking registration period:", error);
+        setIsRegistrationOpen(false);
+      }
+    };
+
+    checkRegistrationPeriod();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +79,35 @@ export default function RegisterPage() {
       setIsLoading(false);
     }
   };
+
+  if (!isRegistrationOpen) {
+    return (
+      <div className="flex min-h-screen items-center justify-center p-6">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold">Pendaftaran Ditutup</h1>
+            <p className="text-muted-foreground">
+              Mohon maaf, pendaftaran siswa baru saat ini sedang ditutup.
+            </p>
+            {currentPeriod && (
+              <div className="mt-4 rounded-lg border p-4">
+                <h2 className="font-semibold mb-2">Informasi Periode Pendaftaran</h2>
+                <p className="text-sm text-muted-foreground">
+                  Periode: {currentPeriod.name}
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  Tanggal: {new Date(currentPeriod.startDate).toLocaleDateString('id-ID')} - {new Date(currentPeriod.endDate).toLocaleDateString('id-ID')}
+                </p>
+              </div>
+            )}
+          </div>
+          <Button asChild>
+            <Link to="/">Kembali ke Beranda</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -200,15 +257,9 @@ export default function RegisterPage() {
                 </>
               ) : (
                 <>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="first-name">Nama Depan</Label>
-                      <Input id="first-name" placeholder="Nama depan" required disabled={isLoading} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="last-name">Nama Belakang</Label>
-                      <Input id="last-name" placeholder="Nama belakang" required disabled={isLoading} />
-                    </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="student-full-name">Nama Lengkap Siswa</Label>
+                    <Input id="student-full-name" placeholder="Masukkan nama lengkap siswa" required disabled={isLoading} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone">Nomor Telepon</Label>
@@ -227,6 +278,10 @@ export default function RegisterPage() {
                     <Input id="province" placeholder="Provinsi" required disabled={isLoading} />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="parent-full-name">Nama Lengkap Wali</Label>
+                    <Input id="parent-full-name" placeholder="Masukkan nama lengkap wali" required disabled={isLoading} />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="program">Program Sekolah</Label>
                     <select
                       id="program"
@@ -237,6 +292,21 @@ export default function RegisterPage() {
                       <option value="">Pilih Program</option>
                       <option value="boarding">Boarding School</option>
                       <option value="full-day">Full Day School</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="jalur">Jalur Pendaftaran</Label>
+                    <select
+                      id="jalur"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      required
+                      disabled={isLoading}
+                    >
+                      <option value="">Pilih Jalur Pendaftaran</option>
+                      <option value="reguler">Reguler</option>
+                      <option value="prestasi-akademik">Prestasi Akademik</option>
+                      <option value="prestasi-non-akademik">Prestasi Non Akademik</option>
+                      <option value="tahfizh">Tahfizh</option>
                     </select>
                   </div>
                   <div className="space-y-4">
