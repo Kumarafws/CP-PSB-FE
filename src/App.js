@@ -22,6 +22,13 @@ import AdminDocuments from './pages/admin/documents';
 import AdminStudents from './pages/admin/students';
 import AdminReports from './pages/admin/reports';
 
+// Headmaster Pages
+import HeadmasterDashboard from './pages/headmaster/dashboard';
+import HeadmasterStudents from './pages/headmaster/students';
+import HeadmasterTeachers from './pages/headmaster/teachers';
+import HeadmasterReports from './pages/headmaster/reports';
+import HeadmasterSettings from './pages/headmaster/settings';
+
 // Super Admin Pages
 import SuperAdminDashboard from './pages/super-admin/dashboard';
 import SuperAdminAdmins from './pages/super-admin/admins';
@@ -67,6 +74,20 @@ function App() {
           <Route path="/admin/documents" element={<AdminDocuments />} />
           <Route path="/admin/students" element={<AdminStudents />} />
           <Route path="/admin/reports" element={<AdminReports />} />
+
+          {/* Headmaster Routes */}
+          <Route
+            path="/headmaster/*"
+            element={
+              <ProtectedRoute allowedRoles={['headmaster']}>
+                <HeadmasterDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/headmaster/students" element={<HeadmasterStudents />} />
+          <Route path="/headmaster/teachers" element={<HeadmasterTeachers />} />
+          <Route path="/headmaster/reports" element={<HeadmasterReports />} />
+          <Route path="/headmaster/settings" element={<HeadmasterSettings />} />
 
           {/* Super Admin Routes */}
           <Route

@@ -11,6 +11,11 @@ export default function LoginPage() {
     email: "",
     password: "",
   });
+  const [resetEmail, setResetEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [step, setStep] = useState("login"); // login, request-otp, verify-otp, new-password
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -27,17 +32,15 @@ export default function LoginPage() {
       // Simulasi login API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Simulasi data user (dalam implementasi nyata, ini akan datang dari API)
+      // Simulasi data user
       const userData = {
         email: formData.email,
-        role: determineUserRole(formData.email), // Fungsi untuk menentukan role berdasarkan email
+        role: determineUserRole(formData.email),
         name: "User Name",
       };
 
-      // Simpan data user ke localStorage
       localStorage.setItem("user", JSON.stringify(userData));
 
-      // Redirect berdasarkan role
       switch (userData.role) {
         case "admin":
           navigate("/admin/dashboard");
@@ -45,18 +48,21 @@ export default function LoginPage() {
         case "super_admin":
           navigate("/super-admin/dashboard");
           break;
+        case "headmaster":
+          navigate("/headmaster/dashboard");
+          break;
         default:
           navigate("/dashboard");
       }
 
       toast({
-        title: "Login berhasil",
-        description: "Selamat datang kembali!",
+        title: "Login Berhasil",
+        description: `Selamat datang di dashboard ${userData.role}`,
       });
     } catch (error) {
       toast({
-        title: "Login gagal",
-        description: "Email atau password salah",
+        title: "Login Gagal",
+        description: error.message,
         variant: "destructive",
       });
     } finally {
@@ -64,12 +70,208 @@ export default function LoginPage() {
     }
   };
 
-  // Fungsi untuk menentukan role berdasarkan email (untuk demo)
+  const handleRequestOTP = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // Simulasi API call untuk mengirim OTP
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Simulasi OTP yang dikirim (dalam implementasi nyata, ini akan datang dari backend)
+      const generatedOTP = "123456"; // OTP statis untuk testing
+      
+      // Simpan OTP ke localStorage untuk testing
+      localStorage.setItem("tempOTP", generatedOTP);
+
+      toast({
+        title: "OTP Terkirim",
+        description: `Kode OTP telah dikirim ke email Anda. Kode OTP: ${generatedOTP}`,
+      });
+
+      setStep("verify-otp");
+    } catch (error) {
+      toast({
+        title: "Gagal Mengirim OTP",
+        description: "Terjadi kesalahan saat mengirim kode OTP",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      // Ambil OTP dari localStorage
+      const storedOTP = localStorage.getItem("tempOTP");
+
+      // Verifikasi OTP
+      if (otp === storedOTP) {
+        setStep("new-password");
+        toast({
+          title: "OTP Valid",
+          description: "Silakan buat password baru",
+        });
+      } else {
+        throw new Error("Kode OTP tidak valid");
+      }
+    } catch (error) {
+      toast({
+        title: "Verifikasi Gagal",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      if (newPassword !== confirmPassword) {
+        throw new Error("Password tidak cocok");
+      }
+
+      // Simulasi API call untuk reset password
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      toast({
+        title: "Password Berhasil Diubah",
+        description: "Silakan login dengan password baru Anda",
+      });
+
+      // Reset semua state dan kembali ke form login
+      setStep("login");
+      setResetEmail("");
+      setOtp("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      toast({
+        title: "Gagal Mengubah Password",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderForgotPasswordForm = () => {
+    switch (step) {
+      case "request-otp":
+        return (
+          <form onSubmit={handleRequestOTP} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="resetEmail">Email</Label>
+              <Input
+                id="resetEmail"
+                type="email"
+                placeholder="nama@contoh.com"
+                value={resetEmail}
+                onChange={(e) => setResetEmail(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Memproses..." : "Kirim Kode OTP"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setStep("login")}
+              disabled={isLoading}
+            >
+              Kembali ke Login
+            </Button>
+          </form>
+        );
+
+      case "verify-otp":
+        return (
+          <form onSubmit={handleVerifyOTP} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="otp">Kode OTP</Label>
+              <Input
+                id="otp"
+                type="text"
+                placeholder="Masukkan 6 digit kode OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+                required
+                disabled={isLoading}
+                maxLength={6}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Memverifikasi..." : "Verifikasi OTP"}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => setStep("request-otp")}
+              disabled={isLoading}
+            >
+              Kirim Ulang OTP
+            </Button>
+          </form>
+        );
+
+      case "new-password":
+        return (
+          <form onSubmit={handleResetPassword} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">Password Baru</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                placeholder="••••••••"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Konfirmasi Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Memproses..." : "Ubah Password"}
+            </Button>
+          </form>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   const determineUserRole = (email) => {
     if (email.includes("admin")) {
       return "admin";
     } else if (email.includes("super")) {
       return "super_admin";
+    } else if (email.includes("headmaster")) {
+      return "headmaster";
     }
     return "wali";
   };
@@ -127,40 +329,62 @@ export default function LoginPage() {
           </div>
           <div className="mx-auto flex w-full max-w-md flex-col justify-center space-y-6">
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold">Masuk</h1>
+              <h1 className="text-3xl font-bold">
+                {step === "login" ? "Masuk" : "Lupa Password"}
+              </h1>
               <p className="text-sm text-muted-foreground">
-                Masukkan email dan password Anda
+                {step === "login"
+                  ? "Masukkan email dan password Anda"
+                  : step === "request-otp"
+                  ? "Masukkan email Anda untuk menerima kode OTP"
+                  : step === "verify-otp"
+                  ? "Masukkan kode OTP yang telah dikirim ke email Anda"
+                  : "Buat password baru untuk akun Anda"}
               </p>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="nama@contoh.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  disabled={isLoading}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                  disabled={isLoading}
-                />
-              </div>
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Memproses..." : "Masuk"}
-              </Button>
-            </form>
+
+            {step === "login" ? (
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="nama@contoh.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    disabled={isLoading}
+                  />
+                </div>
+                <Button
+                  type="button"
+                  variant="link"
+                  className="px-0 font-normal"
+                  onClick={() => setStep("request-otp")}
+                >
+                  Lupa password?
+                </Button>
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Memproses..." : "Masuk"}
+                </Button>
+              </form>
+            ) : (
+              renderForgotPasswordForm()
+            )}
+
             <div className="text-center text-sm">
               <span className="text-muted-foreground">
                 Belum punya akun?{" "}
