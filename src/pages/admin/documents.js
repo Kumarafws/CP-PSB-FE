@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { useToast } from "../../hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../../components/ui/dialog";
 
 export default function AdminDocuments() {
   const { toast } = useToast();
@@ -9,6 +17,8 @@ export default function AdminDocuments() {
   const [documentType, setDocumentType] = useState("");
   const [selectedDocument, setSelectedDocument] = useState(null);
   const [showViewer, setShowViewer] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
 
   // Mock data - replace with actual API calls
   const [documents, setDocuments] = useState([
@@ -36,6 +46,19 @@ export default function AdminDocuments() {
   const handleViewDocument = (document) => {
     setSelectedDocument(document);
     setShowViewer(true);
+  };
+
+  const openConfirmDialog = (document, action) => {
+    setSelectedDocument(document);
+    setPendingAction(action);
+    setShowConfirmDialog(true);
+  };
+
+  const confirmDocumentVerification = () => {
+    if (selectedDocument && pendingAction) {
+      handleVerifyDocument(selectedDocument.id, pendingAction);
+      setShowConfirmDialog(false);
+    }
   };
 
   const handleVerifyDocument = async (documentId, status) => {
@@ -164,7 +187,7 @@ export default function AdminDocuments() {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handleVerifyDocument(doc.id, "verified")}
+                            onClick={() => openConfirmDialog(doc, "verified")}
                             className="bg-green-50 text-green-700 hover:bg-green-100"
                           >
                             Terima
@@ -172,7 +195,7 @@ export default function AdminDocuments() {
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handleVerifyDocument(doc.id, "rejected")}
+                            onClick={() => openConfirmDialog(doc, "rejected")}
                             className="bg-red-50 text-red-700 hover:bg-red-100"
                           >
                             Tolak
@@ -214,6 +237,29 @@ export default function AdminDocuments() {
           </div>
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Verifikasi Dokumen</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin {pendingAction === "verified" ? "menerima" : "menolak"} dokumen {selectedDocument?.documentType} dari {selectedDocument?.studentName}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+              Batal
+            </Button>
+            <Button 
+              variant={pendingAction === "verified" ? "default" : "destructive"}
+              onClick={confirmDocumentVerification}
+            >
+              Konfirmasi
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

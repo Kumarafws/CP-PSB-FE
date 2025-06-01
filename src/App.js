@@ -17,7 +17,7 @@ import AnnouncementPage from './pages/announcement';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/dashboard';
-import AdminRegistrations from './pages/admin/registrations';
+import AdminRegistrations from './pages/admin/manage-registrations';
 import AdminDocuments from './pages/admin/documents';
 import AdminStudents from './pages/admin/students';
 import AdminReports from './pages/admin/reports';
@@ -35,8 +35,8 @@ import HeadmasterSettings from './pages/headmaster/settings';
 // Super Admin Pages
 import SuperAdminDashboard from './pages/super-admin/dashboard';
 import SuperAdminAdmins from './pages/super-admin/admins';
-import SuperAdminSchools from './pages/super-admin/schools';
-import SuperAdminReports from './pages/super-admin/reports';
+import SuperAdminActivityLogs from './pages/super-admin/activity-logs';
+import SuperAdminProgramManagement from './pages/super-admin/program-management';
 import SuperAdminSettings from './pages/super-admin/settings';
 
 function App() {
@@ -105,8 +105,8 @@ function App() {
             }
           />
           <Route path="/super-admin/admins" element={<SuperAdminAdmins />} />
-          <Route path="/super-admin/schools" element={<SuperAdminSchools />} />
-          <Route path="/super-admin/reports" element={<SuperAdminReports />} />
+          <Route path="/super-admin/activity-logs" element={<SuperAdminActivityLogs />} />
+          <Route path="/super-admin/program-management" element={<SuperAdminProgramManagement />} />
           <Route path="/super-admin/settings" element={<SuperAdminSettings />} />
         </Routes>
       </Router>

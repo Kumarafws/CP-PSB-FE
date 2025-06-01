@@ -46,6 +46,8 @@ export default function ParentAccounts() {
   const [isResettingPassword, setIsResettingPassword] = useState(false);
   const [selectedParent, setSelectedParent] = useState(null);
   const [showActivityHistory, setShowActivityHistory] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [parentToDelete, setParentToDelete] = useState(null);
   const { toast } = useToast();
 
   // Simulasi data wali murid
@@ -111,6 +113,19 @@ export default function ParentAccounts() {
     });
     setIsEditing(false);
     setSelectedParent(null);
+  };
+
+  const openDeleteConfirm = (parent) => {
+    setParentToDelete(parent);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteParent = () => {
+    if (parentToDelete) {
+      handleDeleteParent(parentToDelete.id);
+      setShowDeleteConfirm(false);
+      setParentToDelete(null);
+    }
   };
 
   const handleDeleteParent = (parentId) => {
@@ -307,7 +322,7 @@ export default function ParentAccounts() {
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         className="text-red-600"
-                        onClick={() => handleDeleteParent(parent.id)}
+                        onClick={() => openDeleteConfirm(parent)}
                       >
                         Hapus Akun
                       </DropdownMenuItem>
@@ -427,6 +442,36 @@ export default function ParentAccounts() {
           <DialogFooter>
             <Button onClick={() => setShowActivityHistory(false)}>
               Tutup
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Hapus Akun</DialogTitle>
+            <DialogDescription>
+              Anda akan menghapus akun wali murid berikut:
+              <div className="mt-2 space-y-1">
+                <p className="font-medium">{parentToDelete?.name}</p>
+                <p className="text-sm text-muted-foreground">{parentToDelete?.email}</p>
+              </div>
+              <p className="mt-4 text-sm text-red-600">
+                Perhatian: Aksi ini tidak dapat dibatalkan dan semua data terkait akan dihapus secara permanen.
+              </p>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
+              Batal
+            </Button>
+            <Button 
+              variant="destructive"
+              onClick={confirmDeleteParent}
+            >
+              Hapus Akun
             </Button>
           </DialogFooter>
         </DialogContent>

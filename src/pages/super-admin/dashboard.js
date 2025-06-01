@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { useToast } from "../../hooks/use-toast";
 
 export default function SuperAdminDashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     toast({
@@ -45,22 +61,59 @@ export default function SuperAdminDashboard() {
             <span className="sr-only">Notifications</span>
             <span className="absolute right-1 top-1 flex h-2 w-2 rounded-full bg-primary"></span>
           </Button>
-          <div className="relative">
-            <Button variant="outline" className="flex items-center gap-2">
+          <div className="relative" ref={dropdownRef}>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
               <img src="/placeholder.svg" alt="Avatar" width={24} height={24} className="rounded-full" />
               <span className="hidden md:inline-flex">Super Admin</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+              >
                 <path d="m6 9 6 6 6-6"></path>
               </svg>
             </Button>
-            <div className="absolute right-0 mt-2 w-48 rounded-md border bg-background shadow-lg">
-              <div className="py-1">
-                <Link to="/super-admin/profile" className="block px-4 py-2 text-sm hover:bg-muted">Profil</Link>
-                <Link to="/super-admin/settings" className="block px-4 py-2 text-sm hover:bg-muted">Pengaturan</Link>
-                <hr className="my-1" />
-                <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-sm hover:bg-muted">Keluar</button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md border bg-background shadow-lg">
+                <div className="py-1">
+                  <Link 
+                    to="/super-admin/profile" 
+                    className="block px-4 py-2 text-sm hover:bg-muted"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Profil
+                  </Link>
+                  <Link 
+                    to="/super-admin/settings" 
+                    className="block px-4 py-2 text-sm hover:bg-muted"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Pengaturan
+                  </Link>
+                  <hr className="my-1" />
+                  <button 
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      handleLogout();
+                    }} 
+                    className="block w-full px-4 py-2 text-left text-sm hover:bg-muted"
+                  >
+                    Keluar
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </header>
@@ -85,12 +138,21 @@ export default function SuperAdminDashboard() {
               </svg>
               <span>Kelola Admin</span>
             </Link>
-            <Link to="/super-admin/schools" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
+            <Link to="/super-admin/activity-logs" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                <path d="M2 9l10-7 10 7v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
               </svg>
-              <span>Kelola Madrasah</span>
+              <span>Log Aktivitas</span>
+            </Link>
+            <Link to="/super-admin/program-management" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+              <span>Manajemen Program</span>
             </Link>
             <Link to="/super-admin/reports" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">

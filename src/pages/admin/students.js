@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import { useToast } from "../../hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../../components/ui/dialog";
 
 export default function AdminStudents() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showDetailDialog, setShowDetailDialog] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [pendingAction, setPendingAction] = useState(null);
 
   // Mock data - replace with actual API data
   const [students, setStudents] = useState([
@@ -15,12 +27,21 @@ export default function AdminStudents() {
       name: "Ahmad Fauzi",
       email: "ahmad@example.com",
       registrationDate: "2024-03-15",
-      status: "pending", // pending, accepted, rejected
+      status: "pending",
       documents: {
         akte: true,
         kk: true,
         rapor: true
-      }
+      },
+      // Additional student details
+      birthDate: "2005-05-15",
+      address: "Jl. Merdeka No. 123, Jakarta",
+      phone: "081234567890",
+      parentName: "Budi Fauzi",
+      parentPhone: "081234567891",
+      // Status change information
+      statusChangedBy: null,
+      statusChangedAt: null
     },
     {
       id: 2,
@@ -32,9 +53,17 @@ export default function AdminStudents() {
         akte: true,
         kk: true,
         rapor: false
-      }
+      },
+      // Additional student details
+      birthDate: "2005-06-20",
+      address: "Jl. Sudirman No. 45, Jakarta",
+      phone: "081234567892",
+      parentName: "Aminah Siti",
+      parentPhone: "081234567893",
+      // Status change information
+      statusChangedBy: null,
+      statusChangedAt: null
     },
-    // Add more mock data as needed
   ]);
 
   const handleStatusChange = async (studentId, newStatus) => {
@@ -42,7 +71,12 @@ export default function AdminStudents() {
       // Here you would normally make an API call to update the status
       setStudents(students.map(student => {
         if (student.id === studentId) {
-          return { ...student, status: newStatus };
+          return { 
+            ...student, 
+            status: newStatus,
+            statusChangedBy: "Admin Name", // Replace with actual admin name
+            statusChangedAt: new Date().toISOString()
+          };
         }
         return student;
       }));
@@ -59,6 +93,24 @@ export default function AdminStudents() {
         description: "Terjadi kesalahan saat memperbarui status siswa",
         variant: "destructive",
       });
+    }
+  };
+
+  const openConfirmDialog = (student, action) => {
+    setSelectedStudent(student);
+    setPendingAction(action);
+    setShowConfirmDialog(true);
+  };
+
+  const openDetailDialog = (student) => {
+    setSelectedStudent(student);
+    setShowDetailDialog(true);
+  };
+
+  const confirmStatusChange = () => {
+    if (selectedStudent && pendingAction) {
+      handleStatusChange(selectedStudent.id, pendingAction);
+      setShowConfirmDialog(false);
     }
   };
 
@@ -174,7 +226,7 @@ export default function AdminStudents() {
                             variant="outline"
                             size="sm"
                             className="bg-green-50 text-green-700 hover:bg-green-100"
-                            onClick={() => handleStatusChange(student.id, "accepted")}
+                            onClick={() => openConfirmDialog(student, "accepted")}
                           >
                             Terima
                           </Button>
@@ -182,13 +234,17 @@ export default function AdminStudents() {
                             variant="outline"
                             size="sm"
                             className="bg-red-50 text-red-700 hover:bg-red-100"
-                            onClick={() => handleStatusChange(student.id, "rejected")}
+                            onClick={() => openConfirmDialog(student, "rejected")}
                           >
                             Tolak
                           </Button>
                         </>
                       )}
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => openDetailDialog(student)}
+                      >
                         Detail
                       </Button>
                     </div>
@@ -199,6 +255,87 @@ export default function AdminStudents() {
           </table>
         </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Perubahan Status</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin {pendingAction === "accepted" ? "menerima" : "menolak"} siswa {selectedStudent?.name}?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+              Batal
+            </Button>
+            <Button 
+              variant={pendingAction === "accepted" ? "default" : "destructive"}
+              onClick={confirmStatusChange}
+            >
+              Konfirmasi
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Student Detail Dialog */}
+      <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detail Siswa</DialogTitle>
+          </DialogHeader>
+          {selectedStudent && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <h3 className="font-semibold">Informasi Pribadi</h3>
+                  <p>Nama: {selectedStudent.name}</p>
+                  <p>Email: {selectedStudent.email}</p>
+                  <p>Tanggal Lahir: {selectedStudent.birthDate}</p>
+                  <p>Alamat: {selectedStudent.address}</p>
+                  <p>No. Telepon: {selectedStudent.phone}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold">Informasi Orang Tua</h3>
+                  <p>Nama Orang Tua: {selectedStudent.parentName}</p>
+                  <p>No. Telepon Orang Tua: {selectedStudent.parentPhone}</p>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold">Status Dokumen</h3>
+                <div className="flex gap-2">
+                  <span className={`rounded-full px-2 py-1 text-xs ${
+                    selectedStudent.documents.akte ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  }`}>
+                    Akte
+                  </span>
+                  <span className={`rounded-full px-2 py-1 text-xs ${
+                    selectedStudent.documents.kk ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  }`}>
+                    KK
+                  </span>
+                  <span className={`rounded-full px-2 py-1 text-xs ${
+                    selectedStudent.documents.rapor ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                  }`}>
+                    Rapor
+                  </span>
+                </div>
+              </div>
+
+              {selectedStudent.status !== "pending" && (
+                <div>
+                  <h3 className="font-semibold">Informasi Keputusan</h3>
+                  <p>Status: {selectedStudent.status === "accepted" ? "Diterima" : "Ditolak"}</p>
+                  <p>Ditentukan oleh: {selectedStudent.statusChangedBy}</p>
+                  <p>Waktu: {new Date(selectedStudent.statusChangedAt).toLocaleString()}</p>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 } 

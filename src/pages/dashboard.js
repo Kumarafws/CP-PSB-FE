@@ -1,19 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { useToast } from "../hooks/use-toast";
 
 export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
     toast({
       title: "Berhasil keluar",
       description: "Anda telah keluar dari sistem",
     });
-    // Redirect ke halaman login
     navigate("/login");
   };
 
@@ -46,8 +61,12 @@ export default function DashboardPage() {
             <span className="sr-only">Notifications</span>
             <span className="absolute right-1 top-1 flex h-2 w-2 rounded-full bg-primary"></span>
           </Button>
-          <div className="relative">
-            <Button variant="outline" className="flex items-center gap-2">
+          <div className="relative" ref={dropdownRef}>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
               <img
                 src="/placeholder.svg"
                 alt="Avatar"
@@ -56,18 +75,51 @@ export default function DashboardPage() {
                 className="rounded-full"
               />
               <span className="hidden md:inline-flex">Ahmad Fauzi</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="24" 
+                height="24" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+              >
                 <path d="m6 9 6 6 6-6"></path>
               </svg>
             </Button>
-            <div className="absolute right-0 mt-2 w-48 rounded-md border bg-background shadow-lg">
-              <div className="py-1">
-                <Link to="/dashboard/profile" className="block px-4 py-2 text-sm hover:bg-muted">Profil</Link>
-                <Link to="/dashboard/settings" className="block px-4 py-2 text-sm hover:bg-muted">Pengaturan</Link>
-                <hr className="my-1" />
-                <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-sm hover:bg-muted">Keluar</button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-48 rounded-md border bg-background shadow-lg">
+                <div className="py-1">
+                  <Link 
+                    to="/dashboard/profile" 
+                    className="block px-4 py-2 text-sm hover:bg-muted"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Profil
+                  </Link>
+                  <Link 
+                    to="/dashboard/settings" 
+                    className="block px-4 py-2 text-sm hover:bg-muted"
+                    onClick={() => setDropdownOpen(false)}
+                  >
+                    Pengaturan
+                  </Link>
+                  <hr className="my-1" />
+                  <button 
+                    onClick={() => {
+                      setDropdownOpen(false);
+                      handleLogout();
+                    }} 
+                    className="block w-full px-4 py-2 text-left text-sm hover:bg-muted"
+                  >
+                    Keluar
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </header>
