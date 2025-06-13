@@ -9,9 +9,9 @@ import HomePage from './pages/home';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import RegisterSuccessPage from './pages/register-success';
-import DashboardPage from './pages/dashboard';
-import DocumentsPage from './pages/documents';
-import AnnouncementPage from './pages/announcement';
+import DashboardPage from './pages/wali-siswa/dashboard';
+import DocumentsPage from './pages/wali-siswa/documents';
+import AnnouncementPage from './pages/wali-siswa/announcement';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/dashboard';

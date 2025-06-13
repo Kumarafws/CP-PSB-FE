@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Button } from "../components/ui/button";
-import { useToast } from "../hooks/use-toast";
+import { Button } from "../../components/ui/button";
+import { useToast } from "../../hooks/use-toast";
 
 export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

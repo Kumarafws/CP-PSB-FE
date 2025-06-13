@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Button } from "../components/ui/button";
-import { useToast } from "../hooks/use-toast";
+import { Button } from "../../components/ui/button";
+import { useToast } from "../../hooks/use-toast";
 import { Link } from "react-router-dom";
 
 export default function DocumentsPage() {
