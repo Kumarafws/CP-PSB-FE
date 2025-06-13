@@ -209,10 +209,22 @@ export default function AdminQuota() {
 
   const getQuotaProgress = (filled, quota) => {
     const percentage = (filled / quota) * 100;
-    return {
-      percentage,
-      color: percentage >= 80 ? "bg-red-500" : percentage >= 60 ? "bg-yellow-500" : "bg-green-500"
-    };
+    if (percentage >= 100) {
+      return {
+        text: "Tidak Tersedia",
+        className: "text-red-600 font-medium"
+      };
+    } else if (percentage >= 80) {
+      return {
+        text: "Hampir Penuh",
+        className: "text-orange-600 font-medium"
+      };
+    } else {
+      return {
+        text: "Tersedia",
+        className: "text-green-600 font-medium"
+      };
+    }
   };
 
   return (
@@ -609,10 +621,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.boarding.paths.reguler.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.boarding.paths.reguler.filled / quota.programs.boarding.paths.reguler.quota) * 100}
-                          className={getQuotaProgress(quota.programs.boarding.paths.reguler.filled, quota.programs.boarding.paths.reguler.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.boarding.paths.reguler.filled, quota.programs.boarding.paths.reguler.quota).className}>
+                          {getQuotaProgress(quota.programs.boarding.paths.reguler.filled, quota.programs.boarding.paths.reguler.quota).text}
+                        </span>
                       </div>
                     </td>
                     <td className="p-4" rowSpan="8">
@@ -640,10 +651,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.boarding.paths.prestasiAkademik.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.boarding.paths.prestasiAkademik.filled / quota.programs.boarding.paths.prestasiAkademik.quota) * 100}
-                          className={getQuotaProgress(quota.programs.boarding.paths.prestasiAkademik.filled, quota.programs.boarding.paths.prestasiAkademik.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.boarding.paths.prestasiAkademik.filled, quota.programs.boarding.paths.prestasiAkademik.quota).className}>
+                          {getQuotaProgress(quota.programs.boarding.paths.prestasiAkademik.filled, quota.programs.boarding.paths.prestasiAkademik.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -653,10 +663,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.boarding.paths.prestasiNonAkademik.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.boarding.paths.prestasiNonAkademik.filled / quota.programs.boarding.paths.prestasiNonAkademik.quota) * 100}
-                          className={getQuotaProgress(quota.programs.boarding.paths.prestasiNonAkademik.filled, quota.programs.boarding.paths.prestasiNonAkademik.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.boarding.paths.prestasiNonAkademik.filled, quota.programs.boarding.paths.prestasiNonAkademik.quota).className}>
+                          {getQuotaProgress(quota.programs.boarding.paths.prestasiNonAkademik.filled, quota.programs.boarding.paths.prestasiNonAkademik.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -666,10 +675,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.boarding.paths.tahfizh.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.boarding.paths.tahfizh.filled / quota.programs.boarding.paths.tahfizh.quota) * 100}
-                          className={getQuotaProgress(quota.programs.boarding.paths.tahfizh.filled, quota.programs.boarding.paths.tahfizh.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.boarding.paths.tahfizh.filled, quota.programs.boarding.paths.tahfizh.quota).className}>
+                          {getQuotaProgress(quota.programs.boarding.paths.tahfizh.filled, quota.programs.boarding.paths.tahfizh.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -682,10 +690,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.fullDay.paths.reguler.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.fullDay.paths.reguler.filled / quota.programs.fullDay.paths.reguler.quota) * 100}
-                          className={getQuotaProgress(quota.programs.fullDay.paths.reguler.filled, quota.programs.fullDay.paths.reguler.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.fullDay.paths.reguler.filled, quota.programs.fullDay.paths.reguler.quota).className}>
+                          {getQuotaProgress(quota.programs.fullDay.paths.reguler.filled, quota.programs.fullDay.paths.reguler.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -695,10 +702,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.fullDay.paths.prestasiAkademik.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.fullDay.paths.prestasiAkademik.filled / quota.programs.fullDay.paths.prestasiAkademik.quota) * 100}
-                          className={getQuotaProgress(quota.programs.fullDay.paths.prestasiAkademik.filled, quota.programs.fullDay.paths.prestasiAkademik.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.fullDay.paths.prestasiAkademik.filled, quota.programs.fullDay.paths.prestasiAkademik.quota).className}>
+                          {getQuotaProgress(quota.programs.fullDay.paths.prestasiAkademik.filled, quota.programs.fullDay.paths.prestasiAkademik.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -708,10 +714,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.fullDay.paths.prestasiNonAkademik.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.fullDay.paths.prestasiNonAkademik.filled / quota.programs.fullDay.paths.prestasiNonAkademik.quota) * 100}
-                          className={getQuotaProgress(quota.programs.fullDay.paths.prestasiNonAkademik.filled, quota.programs.fullDay.paths.prestasiNonAkademik.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.fullDay.paths.prestasiNonAkademik.filled, quota.programs.fullDay.paths.prestasiNonAkademik.quota).className}>
+                          {getQuotaProgress(quota.programs.fullDay.paths.prestasiNonAkademik.filled, quota.programs.fullDay.paths.prestasiNonAkademik.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>
@@ -721,10 +726,9 @@ export default function AdminQuota() {
                     <td className="p-4">{quota.programs.fullDay.paths.tahfizh.filled}</td>
                     <td className="p-4">
                       <div className="w-full">
-                        <Progress 
-                          value={(quota.programs.fullDay.paths.tahfizh.filled / quota.programs.fullDay.paths.tahfizh.quota) * 100}
-                          className={getQuotaProgress(quota.programs.fullDay.paths.tahfizh.filled, quota.programs.fullDay.paths.tahfizh.quota).color}
-                        />
+                        <span className={getQuotaProgress(quota.programs.fullDay.paths.tahfizh.filled, quota.programs.fullDay.paths.tahfizh.quota).className}>
+                          {getQuotaProgress(quota.programs.fullDay.paths.tahfizh.filled, quota.programs.fullDay.paths.tahfizh.quota).text}
+                        </span>
                       </div>
                     </td>
                   </tr>

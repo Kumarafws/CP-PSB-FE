@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +33,7 @@ ChartJS.register(
 
 function HeadmasterDashboard() {
   const navigate = useNavigate();
+  const [selectedYear, setSelectedYear] = useState('2024');
 
   const handleLogout = () => {
     // Clear any stored authentication data
@@ -97,13 +105,24 @@ function HeadmasterDashboard() {
       legend: {
         position: 'top',
       },
+      title: {
+        display: true,
+        font: {
+          size: 16,
+          weight: 'bold'
+        }
+      }
     },
+    maintainAspectRatio: false
   };
 
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Dashboard Kepala Sekolah</h1>
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard Kepala Sekolah</h1>
+          <p className="text-muted-foreground mt-1">Selamat datang di panel kepala sekolah</p>
+        </div>
         <Button 
           variant="destructive" 
           onClick={handleLogout}
@@ -129,47 +148,35 @@ function HeadmasterDashboard() {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Data Siswa</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-600 mb-4">Kelola data siswa dan informasi akademik</p>
-            <Button onClick={() => navigate('/headmaster/students')}>
+        <Card className="col-span-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xl font-bold">Data Siswa</CardTitle>
+            <Button onClick={() => navigate('/headmaster/students')} className="bg-primary hover:bg-primary/90">
               Lihat Data Siswa
             </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Data Guru</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-600 mb-4">Kelola data guru dan jadwal mengajar</p>
-            <Button onClick={() => navigate('/headmaster/teachers')}>
-              Lihat Data Guru
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Laporan</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-gray-600 mb-4">Lihat laporan akademik dan keuangan</p>
-            <Button onClick={() => navigate('/headmaster/reports')}>
-              Lihat Laporan
-            </Button>
+            <p className="text-muted-foreground">Kelola data siswa dan informasi akademik</p>
           </CardContent>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
-          <CardHeader>
-            <CardTitle>Status Pendaftaran Tahun Ini</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xl font-bold">Status Pendaftaran</CardTitle>
+            <Select value={selectedYear} onValueChange={setSelectedYear}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Pilih Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2020">2020</SelectItem>
+                <SelectItem value="2021">2021</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
@@ -179,8 +186,20 @@ function HeadmasterDashboard() {
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle>Perbandingan Jumlah Pendaftar per Tahun</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xl font-bold">Perbandingan Jumlah Pendaftar</CardTitle>
+            <Select value={selectedYear} onValueChange={setSelectedYear}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Pilih Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2020">2020</SelectItem>
+                <SelectItem value="2021">2021</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
@@ -190,8 +209,20 @@ function HeadmasterDashboard() {
         </Card>
 
         <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Perbandingan Status Pendaftaran per Tahun</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xl font-bold">Perbandingan Status Pendaftaran per Tahun</CardTitle>
+            <Select value={selectedYear} onValueChange={setSelectedYear}>
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Pilih Tahun" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="2020">2020</SelectItem>
+                <SelectItem value="2021">2021</SelectItem>
+                <SelectItem value="2022">2022</SelectItem>
+                <SelectItem value="2023">2023</SelectItem>
+                <SelectItem value="2024">2024</SelectItem>
+              </SelectContent>
+            </Select>
           </CardHeader>
           <CardContent>
             <div className="h-[300px]">
@@ -202,7 +233,17 @@ function HeadmasterDashboard() {
                   scales: {
                     y: {
                       beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Jumlah Siswa'
+                      }
                     },
+                    x: {
+                      title: {
+                        display: true,
+                        text: 'Tahun'
+                      }
+                    }
                   },
                 }} 
               />

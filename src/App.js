@@ -11,8 +11,6 @@ import RegisterPage from './pages/register';
 import RegisterSuccessPage from './pages/register-success';
 import DashboardPage from './pages/dashboard';
 import DocumentsPage from './pages/documents';
-import ProfilePage from './pages/profile';
-import SettingsPage from './pages/settings';
 import AnnouncementPage from './pages/announcement';
 
 // Admin Pages
@@ -28,16 +26,12 @@ import ParentAccounts from './pages/admin/parent-accounts';
 // Headmaster Pages
 import HeadmasterDashboard from './pages/headmaster/dashboard';
 import HeadmasterStudents from './pages/headmaster/students';
-import HeadmasterTeachers from './pages/headmaster/teachers';
-import HeadmasterReports from './pages/headmaster/reports';
-import HeadmasterSettings from './pages/headmaster/settings';
 
 // Super Admin Pages
 import SuperAdminDashboard from './pages/super-admin/dashboard';
 import SuperAdminAdmins from './pages/super-admin/admins';
 import SuperAdminActivityLogs from './pages/super-admin/activity-logs';
 import SuperAdminProgramManagement from './pages/super-admin/program-management';
-import SuperAdminSettings from './pages/super-admin/settings';
 
 function App() {
   return (
@@ -61,8 +55,6 @@ function App() {
           />
           <Route path="/dashboard/documents" element={<DocumentsPage />} />
           <Route path="/dashboard/announcement" element={<AnnouncementPage />} />
-          <Route path="/dashboard/profile" element={<ProfilePage />} />
-          <Route path="/dashboard/settings" element={<SettingsPage />} />
 
           {/* Admin Routes */}
           <Route
@@ -91,9 +83,6 @@ function App() {
             }
           />
           <Route path="/headmaster/students" element={<HeadmasterStudents />} />
-          <Route path="/headmaster/teachers" element={<HeadmasterTeachers />} />
-          <Route path="/headmaster/reports" element={<HeadmasterReports />} />
-          <Route path="/headmaster/settings" element={<HeadmasterSettings />} />
 
           {/* Super Admin Routes */}
           <Route
@@ -107,7 +96,6 @@ function App() {
           <Route path="/super-admin/admins" element={<SuperAdminAdmins />} />
           <Route path="/super-admin/activity-logs" element={<SuperAdminActivityLogs />} />
           <Route path="/super-admin/program-management" element={<SuperAdminProgramManagement />} />
-          <Route path="/super-admin/settings" element={<SuperAdminSettings />} />
         </Routes>
       </Router>
       <Toaster />

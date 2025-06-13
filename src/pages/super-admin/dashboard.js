@@ -94,13 +94,6 @@ export default function SuperAdminDashboard() {
                   >
                     Profil
                   </Link>
-                  <Link 
-                    to="/super-admin/settings" 
-                    className="block px-4 py-2 text-sm hover:bg-muted"
-                    onClick={() => setDropdownOpen(false)}
-                  >
-                    Pengaturan
-                  </Link>
                   <hr className="my-1" />
                   <button 
                     onClick={() => {
@@ -153,23 +146,6 @@ export default function SuperAdminDashboard() {
                 <polyline points="10 9 9 9 8 9"></polyline>
               </svg>
               <span>Manajemen Program</span>
-            </Link>
-            <Link to="/super-admin/reports" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-              <span>Laporan</span>
-            </Link>
-            <Link to="/super-admin/settings" className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-muted hover:text-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-              </svg>
-              <span>Pengaturan Sistem</span>
             </Link>
           </nav>
         </aside>

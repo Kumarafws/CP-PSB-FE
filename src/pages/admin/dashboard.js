@@ -223,15 +223,6 @@ export default function AdminDashboard() {
               </svg>
               <span>Akun Wali Murid</span>
             </Link>
-            <div className="mt-auto pt-4 border-t">
-              <Link to="/admin/dashboard" className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground hover:bg-muted hover:text-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                  <path d="m12 19-7-7 7-7"></path>
-                  <path d="M19 12H5"></path>
-                </svg>
-                <span>Kembali ke Dashboard</span>
-              </Link>
-            </div>
           </nav>
         </aside>
 
