@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -19,6 +20,7 @@ import {
 } from "../../components/ui/select";
 
 export default function SuperAdminAdmins() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -102,8 +104,19 @@ export default function SuperAdminAdmins() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Kelola Admin</h1>
-        <p className="text-muted-foreground">Kelola akun admin madrasah</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Kelola Admin</h1>
+            <p className="text-muted-foreground">Kelola akun admin madrasah</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/super-admin/dashboard')}
+            className="flex items-center gap-2"
+          >
+            ← Kembali ke Dashboard
+          </Button>
+        </div>
       </div>
       
       <div className="mb-6">

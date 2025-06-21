@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 import {
   Dialog,
@@ -15,6 +16,7 @@ import {
 } from "../../components/ui/select";
 
 export default function ActivityLogs() {
+  const navigate = useNavigate();
   const [showDetailDialog, setShowDetailDialog] = useState(false);
   const [selectedLog, setSelectedLog] = useState(null);
   const [exportFormat, setExportFormat] = useState("csv");
@@ -93,8 +95,19 @@ export default function ActivityLogs() {
   return (
     <div className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Log Aktivitas</h1>
-        <p className="text-muted-foreground">Catatan aktivitas pengguna dalam sistem</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Log Aktivitas</h1>
+            <p className="text-muted-foreground">Catatan aktivitas pengguna dalam sistem</p>
+          </div>
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/super-admin/dashboard')}
+            className="flex items-center gap-2"
+          >
+            ← Kembali ke Dashboard
+          </Button>
+        </div>
       </div>
       
       <div className="mb-6 space-y-4">
