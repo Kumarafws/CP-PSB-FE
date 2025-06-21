@@ -270,16 +270,12 @@ export default function RegisterPage() {
                     <Input id="address" placeholder="Alamat lengkap" required disabled={isLoading} />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="city">Kota</Label>
-                    <Input id="city" placeholder="Kota" required disabled={isLoading} />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="province">Provinsi</Label>
-                    <Input id="province" placeholder="Provinsi" required disabled={isLoading} />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="parent-full-name">Nama Lengkap Wali</Label>
                     <Input id="parent-full-name" placeholder="Masukkan nama lengkap wali" required disabled={isLoading} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="parent-nik">NIK Wali Siswa</Label>
+                    <Input id="parent-nik" placeholder="Masukkan NIK wali siswa" required disabled={isLoading} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="program">Program Sekolah</Label>
