@@ -20,6 +20,13 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from "../../components/ui/dialog";
 
 ChartJS.register(
   CategoryScale,
@@ -34,12 +41,11 @@ ChartJS.register(
 function HeadmasterDashboard() {
   const navigate = useNavigate();
   const [selectedYear, setSelectedYear] = useState('2024');
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 
   const handleLogout = () => {
-    // Clear any stored authentication data
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Redirect to login page
     navigate('/login');
   };
 
@@ -125,7 +131,7 @@ function HeadmasterDashboard() {
         </div>
         <Button 
           variant="destructive" 
-          onClick={handleLogout}
+          onClick={() => setShowLogoutDialog(true)}
           className="flex items-center gap-2"
         >
           <svg 
@@ -147,6 +153,24 @@ function HeadmasterDashboard() {
         </Button>
       </div>
       
+      {/* Dialog Konfirmasi Logout */}
+      <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Keluar</DialogTitle>
+          </DialogHeader>
+          <p>Apakah Anda yakin ingin keluar?</p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowLogoutDialog(false)}>
+              Batal
+            </Button>
+            <Button variant="destructive" onClick={handleLogout}>
+              Ya
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <Card className="col-span-full">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

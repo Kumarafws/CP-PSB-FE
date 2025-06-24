@@ -65,7 +65,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/admin/registrations" element={<AdminRegistrations />} />
+          <Route path="/admin/manage-registrations" element={<AdminRegistrations />} />
           <Route path="/admin/documents" element={<AdminDocuments />} />
           <Route path="/admin/students" element={<AdminStudents />} />
           <Route path="/admin/reports" element={<AdminReports />} />

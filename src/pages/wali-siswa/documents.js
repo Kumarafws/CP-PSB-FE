@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button } from "../../components/ui/button";
 import { useToast } from "../../hooks/use-toast";
 import { Link } from "react-router-dom";
+import { Sidebar, waliMenu } from "../../components/layout/sidebar";
 
 export default function DocumentsPage() {
   const { toast } = useToast();
@@ -123,94 +124,104 @@ export default function DocumentsPage() {
   };
 
   return (
-    <div className="container py-6">
-      <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold">Dokumen Saya</h1>
-            <p className="text-muted-foreground">
-              Kelola dokumen yang telah Anda unggah
-            </p>
-          </div>
-          <Link to="/dashboard">
-            <Button variant="outline" className="flex items-center gap-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-4 w-4"
-              >
-                <path d="m12 19-7-7 7-7"></path>
-                <path d="M19 12H5"></path>
-              </svg>
-              Kembali ke Dashboard
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {!isRegistrationPeriod && (
-        <div className="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-800">
-          <p className="font-medium">Periode pendaftaran telah berakhir</p>
-          <p className="text-sm">Anda tidak dapat mengubah dokumen yang telah diunggah</p>
-        </div>
-      )}
-
-      <div className="grid gap-6">
-        {documents.map((document) => (
-          <div
-            key={document.id}
-            className="rounded-lg border bg-card p-6 shadow-sm"
-          >
+    <div className="flex min-h-screen">
+      <Sidebar menu={waliMenu} />
+      <div className="flex-1 flex flex-col">
+        <div className="container py-6">
+          <div className="mb-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold">{document.type}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {document.fileName ? (
-                    <>
-                      Diunggah pada: {document.uploadDate}
-                      <br />
-                      Nama file: {document.fileName}
-                    </>
-                  ) : (
-                    "Belum diunggah"
-                  )}
+                <h1 className="text-3xl font-bold">Dokumen Saya</h1>
+                <p className="text-muted-foreground">
+                  Kelola dokumen yang telah Anda unggah
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                {document.status === 'terverifikasi' ? (
-                  <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
-                    Terverifikasi
-                  </span>
-                ) : document.status === 'menunggu' ? (
-                  <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-                    Menunggu Verifikasi
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">
-                    Belum Diunggah
-                  </span>
-                )}
-              </div>
             </div>
+          </div>
 
-            <div className="mt-4 flex gap-2">
-              {document.fileName && (
-                <>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleViewDocument(document)}
-                  >
-                    Lihat Dokumen
-                  </Button>
-                  {document.status !== 'terverifikasi' && isRegistrationPeriod && (
+          {!isRegistrationPeriod && (
+            <div className="mb-6 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-yellow-800">
+              <p className="font-medium">Periode pendaftaran telah berakhir</p>
+              <p className="text-sm">Anda tidak dapat mengubah dokumen yang telah diunggah</p>
+            </div>
+          )}
+
+          <div className="grid gap-6">
+            {documents.map((document) => (
+              <div
+                key={document.id}
+                className="rounded-lg border bg-card p-6 shadow-sm"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">{document.type}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {document.fileName ? (
+                        <>
+                          Diunggah pada: {document.uploadDate}
+                          <br />
+                          Nama file: {document.fileName}
+                        </>
+                      ) : (
+                        "Belum diunggah"
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {document.status === 'terverifikasi' ? (
+                      <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
+                        Terverifikasi
+                      </span>
+                    ) : document.status === 'menunggu' ? (
+                      <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
+                        Menunggu Verifikasi
+                      </span>
+                    ) : (
+                      <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">
+                        Belum Diunggah
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="mt-4 flex gap-2">
+                  {document.fileName && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewDocument(document)}
+                      >
+                        Lihat Dokumen
+                      </Button>
+                      {document.status !== 'terverifikasi' && isRegistrationPeriod && (
+                        <>
+                          <input
+                            type="file"
+                            accept=".pdf"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={(e) => handleFileChange(document.id, e)}
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => fileInputRef.current?.click()}
+                          >
+                            Ganti Dokumen
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDeleteDocument(document.id)}
+                          >
+                            Hapus
+                          </Button>
+                        </>
+                      )}
+                    </>
+                  )}
+                  {!document.fileName && isRegistrationPeriod && (
                     <>
                       <input
                         type="file"
@@ -224,50 +235,25 @@ export default function DocumentsPage() {
                         size="sm"
                         onClick={() => fileInputRef.current?.click()}
                       >
-                        Ganti Dokumen
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteDocument(document.id)}
-                      >
-                        Hapus
+                        Unggah Dokumen
                       </Button>
                     </>
                   )}
-                </>
-              )}
-              {!document.fileName && isRegistrationPeriod && (
-                <>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    className="hidden"
-                    ref={fileInputRef}
-                    onChange={(e) => handleFileChange(document.id, e)}
-                  />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Unggah Dokumen
-                  </Button>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="mt-6 rounded-lg border bg-muted/50 p-4">
-        <h4 className="font-medium">Catatan:</h4>
-        <ul className="mt-2 list-inside list-disc text-sm text-muted-foreground">
-          <li>Dokumen harus dalam format PDF</li>
-          <li>Ukuran maksimal setiap file adalah 2MB</li>
-          <li>Dokumen yang sudah terverifikasi tidak dapat dihapus atau diganti</li>
-          <li>Pastikan dokumen yang Anda unggah jelas dan sesuai</li>
-        </ul>
+          <div className="mt-6 rounded-lg border bg-muted/50 p-4">
+            <h4 className="font-medium">Catatan:</h4>
+            <ul className="mt-2 list-inside list-disc text-sm text-muted-foreground">
+              <li>Dokumen harus dalam format PDF</li>
+              <li>Ukuran maksimal setiap file adalah 2MB</li>
+              <li>Dokumen yang sudah terverifikasi tidak dapat dihapus atau diganti</li>
+              <li>Pastikan dokumen yang Anda unggah jelas dan sesuai</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   );
